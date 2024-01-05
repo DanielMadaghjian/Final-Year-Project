@@ -1,6 +1,8 @@
 
 from DictionaryBuilder.SentimentDictBuilder import SentimentDictBuilder
 from Analyser.SentimentAnalyser import SentimentAnalyser
+from FileWriter.ByDateFileWriter import ByDateFileWriter
+from FileWriter.BySpeakerFileWriter import BySpeakerFileWriter
 
 
 period_speeches_file_path = "C:\\Python Projects\\final_year_project_data\\IrishFamine_Period_Speeches_1845_1852.csv"
@@ -36,3 +38,9 @@ if __name__ == '__main__':
     analyser.analyse_speeches(period_speeches_file_path)
     
     # STEP 3: Write results to file
+    dateFileWriter = ByDateFileWriter(analyser.date_dict)
+    dateFileWriter.WriteToFile()
+    
+    speakerFileWriter = BySpeakerFileWriter(analyser.speakers_dict)
+    speakerFileWriter.WriteToFile()
+   
