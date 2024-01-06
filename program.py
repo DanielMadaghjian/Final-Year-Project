@@ -1,6 +1,7 @@
 
 from DictionaryBuilder.SentimentDictBuilder import SentimentDictBuilder
-from Analyser.SentimentAnalyser import SentimentAnalyser
+from Analyser.ByDateSentimentAnalyser import ByDateSentimentAnalyser
+from Analyser.BySpeakerSentimentAnalyser import BySpeakerSentimentAnalyser
 from FileWriter.ByDateFileWriter import ByDateFileWriter
 from FileWriter.BySpeakerFileWriter import BySpeakerFileWriter
 
@@ -34,13 +35,15 @@ if __name__ == '__main__':
     builder.createDictionary(dictionary_file_path)
     
     # STEP 2: Analyse sentiment by year and by speaker
-    analyser = SentimentAnalyser(builder.sentiment_dict, famine_dict)
-    analyser.analyse_speeches(period_speeches_file_path)
+    date_analyser = ByDateSentimentAnalyser(builder.sentiment_dict, famine_dict)
+    date_analyser.analyse_speeches(period_speeches_file_path)
+    speaker_analyser = BySpeakerSentimentAnalyser(builder.sentiment_dict, famine_dict)
+    speaker_analyser.analyse_speeches(period_speeches_file_path)
     
     # STEP 3: Write results to file
-    dateFileWriter = ByDateFileWriter(analyser.date_dict)
+    dateFileWriter = ByDateFileWriter(date_analyser.date_dict)
     dateFileWriter.WriteToFile()
     
-    speakerFileWriter = BySpeakerFileWriter(analyser.speakers_dict)
+    speakerFileWriter = BySpeakerFileWriter(speaker_analyser.speakers_dict)
     speakerFileWriter.WriteToFile()
    
