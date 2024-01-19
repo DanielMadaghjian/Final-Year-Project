@@ -9,6 +9,9 @@ class ByDateFileWriter(IFileWriter):
     def WriteToFile(self):
         # Specify the CSV file name
         csv_file = os.path.join('Sentiment_Data_Files', 'sentiment_per_year.csv')
+        # Create the directory if it doesn't exist
+        os.makedirs('Sentiment_Data_Files', exist_ok=True)
+        
         # Open the CSV file in write mode
         with open(csv_file, mode='w', newline='') as file:
             writer = csv.writer(file)

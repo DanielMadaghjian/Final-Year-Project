@@ -9,8 +9,9 @@ class BySpeakerFileWriter(IFileWriter):
     def WriteToFile(self):
         # Specify the CSV file name
         csv_file = os.path.join('Sentiment_Data_Files', 'sentiment_per_speaker.csv')
+        os.makedirs('Sentiment_Data_Files', exist_ok=True)
         # Open the CSV file in write mode
-        with open(csv_file, mode='w', newline='') as file:
+        with open(csv_file, mode='w', newline='',encoding="utf-8") as file:
             writer = csv.writer(file)
             # Write the header (column names)
             writer.writerow(["member_name","total_words","positive", "negative", "strong", "weak", "active", "passive", "sentiment_score", "famine_terms"])
