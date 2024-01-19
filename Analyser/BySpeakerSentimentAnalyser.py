@@ -22,19 +22,21 @@ class BySpeakerSentimentAnalyser(ISentimentAnalyser):
             for row in csv_reader:
                 if row:
                     rows.append(row)
+            id = 0
             # iterate through each row and analyse the speech text
             for row in rows:
-                id = row['_id']
-                speaker_name = row['member_name']
+                speaker_name = row['membername']
                 date = row['sitting_date']
                 speech_text = row['text']
                 sentiment_score = self.get_sentiment(speech_text)
                 
                 # append speeches list
-                if self.is_Valid_Row(id):
-                    # calculate sentiment by speaker
-                    self.get_speaker_sentiment(id,speaker_name,date,sentiment_score)
-       
+                # if self.is_Valid_Row(id):
+                #     # calculate sentiment by speaker
+                #     self.get_speaker_sentiment(id,speaker_name,date,sentiment_score)
+                # calculate sentiment by speaker
+                self.get_speaker_sentiment(id,speaker_name,date,sentiment_score)
+                id = id + 1
      # checks whether the row is valid, by inspecting the id
     def is_Valid_Row(self,id):
         id_to_string = str(id)
