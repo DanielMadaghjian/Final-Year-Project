@@ -10,9 +10,9 @@ import os
 my_path = "C:\\hansard_data"
 hansard_file_list = []
 
-# for (directory, subdirectories, files) in os.walk(my_path):
-#     hansard_file_list.extend(files)
-#     break  # remove this line to include files inside subdirectories
+for (directory, subdirectories, files) in os.walk(my_path):
+    hansard_file_list.extend(files)
+    break  # remove this line to include files inside subdirectories
 
 
 period_speeches_file_path = "C:\\Python Projects\\final_year_project_data\\IrishFamine_Period_Speeches_1845_1852.csv"
@@ -45,11 +45,13 @@ if __name__ == '__main__':
     builder.createDictionary(dictionary_file_path)
     
     # STEP 2: Analyse sentiment by year and by speaker
-
     date_analyser = ByDateSentimentAnalyser(builder.sentiment_dict, famine_dict)
-    date_analyser.analyse_speeches(hansard_1835_1840_file_path)
     speaker_analyser = BySpeakerSentimentAnalyser(builder.sentiment_dict, famine_dict)
-    speaker_analyser.analyse_speeches(hansard_1835_1840_file_path)
+    
+    for file in hansard_file_list:
+        path = "C:\\hansard_data"+"\\"+file
+        date_analyser.analyse_speeches(path)
+        speaker_analyser.analyse_speeches(path)
     
     # STEP 3: Write results to file
     dateFileWriter = ByDateFileWriter(date_analyser.date_dict)
