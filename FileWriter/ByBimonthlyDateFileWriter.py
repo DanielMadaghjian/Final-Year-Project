@@ -2,14 +2,13 @@ from .IFileWriter import IFileWriter
 import csv
 import os
 
-class ByDateFileWriter(IFileWriter):
-    def __init__(self, yearly_date_dict, bimonthly_date_dict):
-        self.yearly_date_dict = yearly_date_dict
+class ByBimonthlyDateFileWriter(IFileWriter):
+    def __init__(self, bimonthly_date_dict):
         self.bimonthly_date_dict = bimonthly_date_dict
         
-    def WriteBiMonthlyToFile(self):
+    def WriteToFile(self):
         # Specify the CSV file name
-        csv_file = os.path.join('Sentiment_Data_Files', 'sentiment_per_year.csv')
+        csv_file = os.path.join('Sentiment_Data_Files', 'sentiment_per_bimonthly.csv')
         # Create the directory if it doesn't exist
         os.makedirs('Sentiment_Data_Files', exist_ok=True)
         
@@ -22,7 +21,7 @@ class ByDateFileWriter(IFileWriter):
             dates = []
             scores = []
             # Write the data from the list of objects
-            for date, value in self.date_dict.items():
+            for date, value in self.bimonthly_date_dict.items():
                 if value.total == 0:
                     sentiment_score = 0
                 else:
