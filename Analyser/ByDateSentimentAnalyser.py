@@ -1,17 +1,24 @@
 from .ISentimentAnalyser import ISentimentAnalyser
 from Sentiment_Objects.Sentiment_score import Sentiment_score
 from dateutil import parser
+from .YearMonth import YearMonth
 
 import csv
 import re
 from datetime import datetime
 file_encoding = "utf-8"
 
+MONTH_MAPPING = {
+    'January': 2, 'February': 2, 'March': 4, 'April': 4, 'May': 6, 'June': 6,
+    'July': 8, 'August': 8, 'September': 10, 'October': 10, 'November': 12, 'December': 12
+}
+
 class ByDateSentimentAnalyser(ISentimentAnalyser):
     def __init__(self, sentiment_dict, famine_dict):
         super().__init__(sentiment_dict, famine_dict)
         self.speeches = []
-        self.date_dict = {}
+        self.bimonthly_date_dict = {}
+        self.yearly_date_dict = {}
         
     # analyses sentiment of each speech
     def analyse_speeches(self,period_speeches_file_path):
@@ -31,7 +38,8 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
 
                 # calculate sentiment by date (year)
                 if self.is_Valid_Date(date):
-                    self.get_date_sentiment(date,sentiment_score)
+                    self.get_yearly_date_sentiment(date, sentiment_score)
+                    self.get_bimonthly_date_sentiment(date,sentiment_score)
      # checks whether the row is valid, by inspecting the id
     def is_Valid_Date(self,date):
         try:
@@ -40,23 +48,59 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
             return True
         except ValueError:
             return False
-       
         
-    def get_date_sentiment(self,date,sentiment_score):
+    def get_yearly_date_sentiment(self,date, sentiment_score):
         try:
-            year = int(date.split()[-1])
+            # Parse the date string into a datetime object
+            dt_object = datetime.strptime(date, '%d %B %Y')
+            
+            # Extract year and month from the datetime object
+            year = dt_object.year
+
             # modify date_dict dictionary
-            if year not in self.date_dict:
-                self.date_dict[year] = sentiment_score
+            if year not in self.yearly_date_dict:
+                self.yearly_date_dict[year] = sentiment_score
             else:
-                self.date_dict[year].total += sentiment_score.total
-                self.date_dict[year].positive += sentiment_score.positive
-                self.date_dict[year].negative += sentiment_score.negative
-                self.date_dict[year].strong += sentiment_score.strong
-                self.date_dict[year].weak += sentiment_score.weak
-                self.date_dict[year].active += sentiment_score.active
-                self.date_dict[year].passive += sentiment_score.passive
-                self.date_dict[year].famine_terms += sentiment_score.famine_terms        
+                # Update sentiment scores for existing key
+                existing_score = self.yearly_date_dict[year]
+                existing_score.total += sentiment_score.total
+                existing_score.positive += sentiment_score.positive
+                existing_score.negative += sentiment_score.negative
+                existing_score.strong += sentiment_score.strong
+                existing_score.weak += sentiment_score.weak
+                existing_score.active += sentiment_score.active
+                existing_score.passive += sentiment_score.passive
+                existing_score.famine_terms += sentiment_score.famine_terms       
         except:
-            print("date value Error")
+            print("yearly date value Error")   
+        
+    def get_bimonthly_date_sentiment(self,date,sentiment_score):
+        try:
+            # Parse the date string into a datetime object
+            dt_object = datetime.strptime(date, '%d %B %Y')
+            
+            # Extract year and month from the datetime object
+            year = dt_object.year
+            month_name = dt_object.strftime('%B')
+            month = MONTH_MAPPING.get(month_name)
+            key = YearMonth(year, month)
+            # modify date_dict dictionary
+            if key not in self.bimonthly_date_dict:
+                self.bimonthly_date_dict[key] = sentiment_score
+            else:
+                # Update sentiment scores for existing key
+                existing_score = self.bimonthly_date_dict[key]
+                existing_score.total += sentiment_score.total
+                existing_score.positive += sentiment_score.positive
+                existing_score.negative += sentiment_score.negative
+                existing_score.strong += sentiment_score.strong
+                existing_score.weak += sentiment_score.weak
+                existing_score.active += sentiment_score.active
+                existing_score.passive += sentiment_score.passive
+                existing_score.famine_terms += sentiment_score.famine_terms       
+        except:
+            print("bimonthly date value Error")
+            
+   
+        
      

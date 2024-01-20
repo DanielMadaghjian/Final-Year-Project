@@ -3,6 +3,8 @@ from DictionaryBuilder.SentimentDictBuilder import SentimentDictBuilder
 from Analyser.ByDateSentimentAnalyser import ByDateSentimentAnalyser
 from Analyser.BySpeakerSentimentAnalyser import BySpeakerSentimentAnalyser
 from FileWriter.ByDateFileWriter import ByDateFileWriter
+from FileWriter.ByYearlyDateFileWriter import ByYearlyDateFileWriter
+from FileWriter.ByBimonthlyDateFileWriter import ByBimonthlyDateFileWriter
 from FileWriter.BySpeakerFileWriter import BySpeakerFileWriter
 import os
 
@@ -54,8 +56,11 @@ if __name__ == '__main__':
         speaker_analyser.analyse_speeches(path)
     
     # STEP 3: Write results to file
-    dateFileWriter = ByDateFileWriter(date_analyser.date_dict)
-    dateFileWriter.WriteToFile()
+    yearlyDateFileWriter = ByYearlyDateFileWriter(date_analyser.yearly_date_dict)
+    bimonthlyDateFileWriter = ByBimonthlyDateFileWriter(date_analyser.bimonthly_date_dict)
+    yearlyDateFileWriter.WriteToFile()
+    bimonthlyDateFileWriter.WriteToFile()
+
     
     speakerFileWriter = BySpeakerFileWriter(speaker_analyser.speakers_dict)
     speakerFileWriter.WriteToFile()
