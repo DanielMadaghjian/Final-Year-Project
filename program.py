@@ -51,11 +51,11 @@ if __name__ == '__main__':
     for file in hansard_file_list:
         path = "C:\\hansard_data"+"\\"+file
         date_analyser.analyse_speeches(path)
-        speaker_analyser.analyse_speeches(path)
+        # speaker_analyser.analyse_speeches(path)
     
     # STEP 3: Write results to file
     dateFileWriter = ByDateFileWriter(date_analyser.date_dict)
     dateFileWriter.WriteToFile()
     
-    speakerFileWriter = BySpeakerFileWriter(speaker_analyser.speakers_dict)
-    speakerFileWriter.WriteToFile()
+    # speakerFileWriter = BySpeakerFileWriter(speaker_analyser.speakers_dict)
+    # speakerFileWriter.WriteToFile()

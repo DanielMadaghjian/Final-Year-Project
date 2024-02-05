@@ -25,14 +25,15 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
             # iterate through each row and analyse the speech text
             for row in rows:
                 date = row['sitting_date']
+                speaker_name = row['membername']
                 speech_text = row['text']
                 sentiment_score = self.get_sentiment(speech_text)
                 
 
                 # calculate sentiment by date (year)
-                if self.is_Valid_Date(date):
+                if self.is_Valid_Date(date) and self.is_Valid_Member(speaker_name):
                     self.get_date_sentiment(date,sentiment_score)
-     # checks whether the row is valid, by inspecting the id
+     # checks whether the row is valid, by inspecting the date
     def is_Valid_Date(self,date):
         try:
             # Attempt to parse the date using datetime.strptime
@@ -40,7 +41,12 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
             return True
         except ValueError:
             return False
-       
+    
+    def is_Valid_Member(self, speaker_name):
+        if speaker_name and speaker_name[0].isupper():
+            return True
+        else:
+            return False
         
     def get_date_sentiment(self,date,sentiment_score):
         try:
