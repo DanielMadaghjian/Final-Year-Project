@@ -34,10 +34,10 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
                 date = row['sitting_date']
                 speech_text = row['text']
                 sentiment_score = self.get_sentiment(speech_text)
-                
+                speaker_name = row['membername']
 
                 # calculate sentiment by date (year)
-                if self.is_Valid_Date(date):
+                if self.is_Valid_Date(date) and self.is_Valid_Member(speaker_name):
                     self.get_yearly_date_sentiment(date, sentiment_score)
                     self.get_bimonthly_date_sentiment(date,sentiment_score)
      # checks whether the row is valid, by inspecting the id
@@ -47,6 +47,12 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
             datetime.strptime(date, '%d %B %Y')
             return True
         except ValueError:
+            return False
+        
+    def is_Valid_Member(self, speaker_name):
+        if speaker_name and speaker_name[0].isupper():
+            return True
+        else:
             return False
         
     def get_yearly_date_sentiment(self,date, sentiment_score):

@@ -35,14 +35,21 @@ class BySpeakerSentimentAnalyser(ISentimentAnalyser):
                 #     # calculate sentiment by speaker
                 #     self.get_speaker_sentiment(id,speaker_name,date,sentiment_score)
                 # calculate sentiment by speaker
-                self.get_speaker_sentiment(id,speaker_name,date,sentiment_score)
-                id = id + 1
+                if self.is_Valid_Member(speaker_name):
+                    self.get_speaker_sentiment(id,speaker_name,date,sentiment_score)
+                    id = id + 1
      # checks whether the row is valid, by inspecting the id
     def is_Valid_Row(self,id):
         id_to_string = str(id)
         # Check if the length of the string is 32 and it is an alphanumeric string
         return len(id_to_string) == 32 and id_to_string.isalnum()   
        
+    def is_Valid_Member(self, speaker_name):
+        if speaker_name and speaker_name[0].isupper():
+            return True
+        else:
+            return False
+        
     def get_speaker_sentiment(self, id, speaker_name, date, sentiment_score):
         speech = Speech(id, speaker_name, date, sentiment_score)
         self.speeches.append(speech)
