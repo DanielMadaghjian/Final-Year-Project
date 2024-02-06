@@ -16,7 +16,7 @@ class ByBimonthlyDateFileWriter(IFileWriter):
         with open(csv_file, mode='w', newline='') as file:
             writer = csv.writer(file)
             # Write the header (column names)
-            writer.writerow(["year","month","total_words","positive", "negative", "strong", "weak", "active", "passive", "sentiment_score","famine_terms"])
+            writer.writerow(["year","month","total_words","positive", "negative", "strong", "weak", "active", "passive", "sentiment_score","famine_terms", "grain_terms", "processed_grain_terms", "livestock_terms", "potato_terms", "hay_terms"])
             # Lists to store data for the graph
             dates = []
             scores = []
@@ -27,7 +27,7 @@ class ByBimonthlyDateFileWriter(IFileWriter):
                 else:
                     sentiment_score = (value.negative / value.total ) * 100
                 formatted_score = f"{sentiment_score:.2f}%"
-                writer.writerow([date.year,date.month, value.total, value.positive, value.negative, value.strong, value.weak, value.active, value.passive, formatted_score, value.famine_terms])
+                writer.writerow([date.year,date.month, value.total, value.positive, value.negative, value.strong, value.weak, value.active, value.passive, formatted_score, value.famine_terms, value.grains_terms, value.processed_grains_terms, value.livestock_terms, value.potatoes_terms, value.hay_terms])
                  # Append data to the lists for the graph
                 dates.append(date)
                 scores.append(sentiment_score)

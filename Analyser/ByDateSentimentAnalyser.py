@@ -14,8 +14,8 @@ MONTH_MAPPING = {
 }
 
 class ByDateSentimentAnalyser(ISentimentAnalyser):
-    def __init__(self, sentiment_dict, famine_dict):
-        super().__init__(sentiment_dict, famine_dict)
+    def __init__(self, sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict):
+        super().__init__(sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict)
         self.speeches = []
         self.bimonthly_date_dict = {}
         self.yearly_date_dict = {}
@@ -77,6 +77,11 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
                 existing_score.active += sentiment_score.active
                 existing_score.passive += sentiment_score.passive
                 existing_score.famine_terms += sentiment_score.famine_terms       
+                existing_score.grains_terms += sentiment_score.grains_terms       
+                existing_score.processed_grains_terms += sentiment_score.processed_grains_terms      
+                existing_score.livestock_terms += sentiment_score.livestock_terms       
+                existing_score.potatoes_terms += sentiment_score.potatoes_terms       
+                existing_score.hay_terms += sentiment_score.hay_terms       
         except:
             print("yearly date value Error")   
         
@@ -103,7 +108,12 @@ class ByDateSentimentAnalyser(ISentimentAnalyser):
                 existing_score.weak += sentiment_score.weak
                 existing_score.active += sentiment_score.active
                 existing_score.passive += sentiment_score.passive
-                existing_score.famine_terms += sentiment_score.famine_terms       
+                existing_score.famine_terms += sentiment_score.famine_terms     
+                existing_score.grains_terms += sentiment_score.grains_terms       
+                existing_score.processed_grains_terms += sentiment_score.processed_grains_terms      
+                existing_score.livestock_terms += sentiment_score.livestock_terms       
+                existing_score.potatoes_terms += sentiment_score.potatoes_terms       
+                existing_score.hay_terms += sentiment_score.hay_terms   
         except:
             print("bimonthly date value Error")
             
