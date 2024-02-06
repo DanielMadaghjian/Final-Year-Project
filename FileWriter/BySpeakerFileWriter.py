@@ -14,7 +14,7 @@ class BySpeakerFileWriter(IFileWriter):
         with open(csv_file, mode='w', newline='',encoding="utf-8") as file:
             writer = csv.writer(file)
             # Write the header (column names)
-            writer.writerow(["member_name","total_words","positive", "negative", "strong", "weak", "active", "passive", "sentiment_score", "famine_terms"])
+            writer.writerow(["member_name","total_words","positive", "negative", "strong", "weak", "active", "passive", "sentiment_score", "famine_terms", "grain_terms", "processed_grain_terms", "livestock_terms", "potato_terms", "hay_terms"])
             # Write the data from the list of objects
             for speaker_name, value in self.speakers_dict.items():
                 if value.total == 0:
@@ -22,4 +22,4 @@ class BySpeakerFileWriter(IFileWriter):
                 else:
                     sentiment_score = (value.negative / value.total ) * 100
                 formatted_score = f"{sentiment_score:.2f}%"
-                writer.writerow([speaker_name, value.total, value.positive, value.negative, value.strong, value.weak, value.active, value.passive, formatted_score, value.famine_terms])
+                writer.writerow([speaker_name, value.total, value.positive, value.negative, value.strong, value.weak, value.active, value.passive, formatted_score, value.famine_terms, value.grains_terms, value.processed_grains_terms, value.livestock_terms, value.potatoes_terms, value.hay_terms])

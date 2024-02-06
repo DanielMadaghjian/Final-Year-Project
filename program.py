@@ -39,6 +39,35 @@ famine_dict = [
     'WIDESPREAD HUNGER',
     'FAILED HARVEST'
 ]
+# used oed for synonyms during the famine period
+grains_dict = [
+    'WHEAT', 'WHEAT-BARLEY', 'WHEAT-GRAIN','CEREAL', 'DURUM', 'GRAIN', 'TRITICUM', 'BRAN', 'CORN',
+    'OATS', 'AVENA SATIVA',
+    'BARLEY', 'BARLEY-CORN', 'BARLEY-HARVEST', 'BARLEYCORN',
+]
+processed_grains_dict = [
+    'FLOUR', 'BARLEY-FLOUR', 'FLOUR-BREAD', 'WHEAT-FLOUR', 'dough', 'pastry',
+    'OATMEAL', 'PORRIDGE', 'BURGOO',
+]
+livestock_dict = [
+    'MUTTON',
+    'BEEF', 'BOEUF',
+    'BACON', 'BACON-PIG', 'PANCETTA', 'FLITCH',
+    'BUTTER',
+    'MEAT'
+]
+potatoes_dict = [
+    'POTATOES', 'POTATO',
+    'YAM', 'YAMS',
+    'SPUD', 'SPUDS',
+    'VEGETABLE', 'VEGETABLES',
+    
+]
+hay_dict = [
+    'HAY','BOG-HAY','TIMOTHY', # Grass grown for Hay
+]
+
+
 
 
 if __name__ == '__main__':
@@ -47,15 +76,18 @@ if __name__ == '__main__':
     builder.createDictionary(dictionary_file_path)
     
     # STEP 2: Analyse sentiment by year and by speaker
-    date_analyser = ByDateSentimentAnalyser(builder.sentiment_dict, famine_dict)
-    speaker_analyser = BySpeakerSentimentAnalyser(builder.sentiment_dict, famine_dict)
+    date_analyser = ByDateSentimentAnalyser(builder.sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict)
+    speaker_analyser = BySpeakerSentimentAnalyser(builder.sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict)
     
+    print("analysing files....")
     for file in hansard_file_list:
         path = "C:\\hansard_data"+"\\"+file
         date_analyser.analyse_speeches(path)
         speaker_analyser.analyse_speeches(path)
+        print(file + " is done analysis")
     
     # STEP 3: Write results to file
+    print("writing results to file....")
     yearlyDateFileWriter = ByYearlyDateFileWriter(date_analyser.yearly_date_dict)
     bimonthlyDateFileWriter = ByBimonthlyDateFileWriter(date_analyser.bimonthly_date_dict)
     yearlyDateFileWriter.WriteToFile()

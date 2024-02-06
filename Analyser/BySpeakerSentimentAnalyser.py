@@ -7,8 +7,8 @@ import re
 file_encoding = "utf-8"
 
 class BySpeakerSentimentAnalyser(ISentimentAnalyser):
-    def __init__(self, sentiment_dict, famine_dict):
-        super().__init__(sentiment_dict, famine_dict)
+    def __init__(self, sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict):
+        super().__init__(sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict)
         self.speeches = []
         self.speakers_dict = {}
         
@@ -66,3 +66,8 @@ class BySpeakerSentimentAnalyser(ISentimentAnalyser):
             self.speakers_dict[speaker_name].active = self.speakers_dict[speaker_name].active + sentiment_score.active
             self.speakers_dict[speaker_name].passive = self.speakers_dict[speaker_name].passive + sentiment_score.passive
             self.speakers_dict[speaker_name].famine_terms = self.speakers_dict[speaker_name].famine_terms + sentiment_score.famine_terms
+            self.speakers_dict[speaker_name].grains_terms = self.speakers_dict[speaker_name].grains_terms + sentiment_score.grains_terms
+            self.speakers_dict[speaker_name].processed_grains_terms = self.speakers_dict[speaker_name].processed_grains_terms + sentiment_score.processed_grains_terms
+            self.speakers_dict[speaker_name].livestock_terms = self.speakers_dict[speaker_name].livestock_terms + sentiment_score.livestock_terms
+            self.speakers_dict[speaker_name].potatoes_terms = self.speakers_dict[speaker_name].potatoes_terms + sentiment_score.potatoes_terms
+            self.speakers_dict[speaker_name].hay_terms = self.speakers_dict[speaker_name].hay_terms + sentiment_score.hay_terms
