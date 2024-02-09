@@ -17,7 +17,7 @@ class ByDateFileWriter(IFileWriter):
         with open(csv_file, mode='w', newline='') as file:
             writer = csv.writer(file)
             # Write the header (column names)
-            writer.writerow(["year","month","total_words","positive", "negative", "strong", "weak", "active", "passive", "sentiment_score","famine_terms"])
+            writer.writerow(["year","month","total_words","positive", "negative", "strong", "weak", "active", "passive", "negative_sentiment","famine_terms"])
             # Lists to store data for the graph
             dates = []
             scores = []
