@@ -7,10 +7,14 @@ import re
 file_encoding = "utf-8"
 
 class BySpeakerSentimentAnalyser(ISentimentAnalyser):
-    def __init__(self, sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict):
+    def __init__(self, sentiment_dict, northern_speakers, southern_speakers, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict):
         super().__init__(sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict)
+        self.northern_speakers = northern_speakers
+        self.southern_speakers = southern_speakers
         self.speeches = []
         self.speakers_dict = {}
+        self.northern_speakers_dict = {}
+        self.southern_speakers_dict = {}
         
          
     # analyses sentiment of each speech
@@ -58,16 +62,84 @@ class BySpeakerSentimentAnalyser(ISentimentAnalyser):
         if speaker_name not in self.speakers_dict:
             self.speakers_dict[speaker_name] = sentiment_score
         else:
-            self.speakers_dict[speaker_name].total = self.speakers_dict[speaker_name].total + sentiment_score.total
-            self.speakers_dict[speaker_name].positive = self.speakers_dict[speaker_name].positive + sentiment_score.positive
-            self.speakers_dict[speaker_name].negative = self.speakers_dict[speaker_name].negative + sentiment_score.negative
-            self.speakers_dict[speaker_name].strong = self.speakers_dict[speaker_name].strong + sentiment_score.strong
-            self.speakers_dict[speaker_name].weak = self.speakers_dict[speaker_name].weak + sentiment_score.weak
-            self.speakers_dict[speaker_name].active = self.speakers_dict[speaker_name].active + sentiment_score.active
-            self.speakers_dict[speaker_name].passive = self.speakers_dict[speaker_name].passive + sentiment_score.passive
-            self.speakers_dict[speaker_name].famine_terms = self.speakers_dict[speaker_name].famine_terms + sentiment_score.famine_terms
-            self.speakers_dict[speaker_name].grains_terms = self.speakers_dict[speaker_name].grains_terms + sentiment_score.grains_terms
-            self.speakers_dict[speaker_name].processed_grains_terms = self.speakers_dict[speaker_name].processed_grains_terms + sentiment_score.processed_grains_terms
-            self.speakers_dict[speaker_name].livestock_terms = self.speakers_dict[speaker_name].livestock_terms + sentiment_score.livestock_terms
-            self.speakers_dict[speaker_name].potatoes_terms = self.speakers_dict[speaker_name].potatoes_terms + sentiment_score.potatoes_terms
-            self.speakers_dict[speaker_name].hay_terms = self.speakers_dict[speaker_name].hay_terms + sentiment_score.hay_terms
+            self.update_dict(self.speakers_dict,speaker_name, sentiment_score)
+        # modify northern_speakers_dictionary
+        if speaker_name not in self.northern_speakers_dict and self.check_northern_speaker(speaker_name):
+            self.northern_speakers_dict[speaker_name] = sentiment_score
+        elif speaker_name in self.northern_speakers_dict:
+            self.update_dict(self.northern_speakers_dict, speaker_name, sentiment_score)
+        # modify southern_speakers_dictionary
+        if speaker_name not in self.southern_speakers_dict and self.check_southern_speaker(speaker_name):
+            self.southern_speakers_dict[speaker_name] = sentiment_score
+        elif speaker_name in self.southern_speakers_dict:
+            self.update_dict(self.southern_speakers_dict,speaker_name, sentiment_score)
+            
+            
+    def update_dict(self, dict, speaker_name, sentiment_score):
+        dict[speaker_name].total = self.speakers_dict[speaker_name].total + sentiment_score.total
+        dict[speaker_name].positive = self.speakers_dict[speaker_name].positive + sentiment_score.positive
+        dict[speaker_name].negative = self.speakers_dict[speaker_name].negative + sentiment_score.negative
+        dict[speaker_name].strong = self.speakers_dict[speaker_name].strong + sentiment_score.strong
+        dict[speaker_name].weak = self.speakers_dict[speaker_name].weak + sentiment_score.weak
+        dict[speaker_name].active = self.speakers_dict[speaker_name].active + sentiment_score.active
+        dict[speaker_name].passive = self.speakers_dict[speaker_name].passive + sentiment_score.passive
+        dict[speaker_name].famine_terms = self.speakers_dict[speaker_name].famine_terms + sentiment_score.famine_terms
+        dict[speaker_name].grains_terms = self.speakers_dict[speaker_name].grains_terms + sentiment_score.grains_terms
+        dict[speaker_name].processed_grains_terms = self.speakers_dict[speaker_name].processed_grains_terms + sentiment_score.processed_grains_terms
+        dict[speaker_name].livestock_terms = self.speakers_dict[speaker_name].livestock_terms + sentiment_score.livestock_terms
+        dict[speaker_name].potatoes_terms = self.speakers_dict[speaker_name].potatoes_terms + sentiment_score.potatoes_terms
+        dict[speaker_name].hay_terms = self.speakers_dict[speaker_name].hay_terms + sentiment_score.hay_terms
+            
+    # def update_speakers_dict(self, speaker_name, sentiment_score):
+    #     self.speakers_dict[speaker_name].total = self.speakers_dict[speaker_name].total + sentiment_score.total
+    #     self.speakers_dict[speaker_name].positive = self.speakers_dict[speaker_name].positive + sentiment_score.positive
+    #     self.speakers_dict[speaker_name].negative = self.speakers_dict[speaker_name].negative + sentiment_score.negative
+    #     self.speakers_dict[speaker_name].strong = self.speakers_dict[speaker_name].strong + sentiment_score.strong
+    #     self.speakers_dict[speaker_name].weak = self.speakers_dict[speaker_name].weak + sentiment_score.weak
+    #     self.speakers_dict[speaker_name].active = self.speakers_dict[speaker_name].active + sentiment_score.active
+    #     self.speakers_dict[speaker_name].passive = self.speakers_dict[speaker_name].passive + sentiment_score.passive
+    #     self.speakers_dict[speaker_name].famine_terms = self.speakers_dict[speaker_name].famine_terms + sentiment_score.famine_terms
+    #     self.speakers_dict[speaker_name].grains_terms = self.speakers_dict[speaker_name].grains_terms + sentiment_score.grains_terms
+    #     self.speakers_dict[speaker_name].processed_grains_terms = self.speakers_dict[speaker_name].processed_grains_terms + sentiment_score.processed_grains_terms
+    #     self.speakers_dict[speaker_name].livestock_terms = self.speakers_dict[speaker_name].livestock_terms + sentiment_score.livestock_terms
+    #     self.speakers_dict[speaker_name].potatoes_terms = self.speakers_dict[speaker_name].potatoes_terms + sentiment_score.potatoes_terms
+    #     self.speakers_dict[speaker_name].hay_terms = self.speakers_dict[speaker_name].hay_terms + sentiment_score.hay_terms
+    # def update_northern_speakers_dict(self, speaker_name, sentiment_score):
+    #     self.northern_speakers_dict[speaker_name].total = self.speakers_dict[speaker_name].total + sentiment_score.total
+    #     self.northern_speakers_dict[speaker_name].positive = self.speakers_dict[speaker_name].positive + sentiment_score.positive
+    #     self.northern_speakers_dict[speaker_name].negative = self.speakers_dict[speaker_name].negative + sentiment_score.negative
+    #     self.northern_speakers_dict[speaker_name].strong = self.speakers_dict[speaker_name].strong + sentiment_score.strong
+    #     self.northern_speakers_dict[speaker_name].weak = self.speakers_dict[speaker_name].weak + sentiment_score.weak
+    #     self.northern_speakers_dict[speaker_name].active = self.speakers_dict[speaker_name].active + sentiment_score.active
+    #     self.northern_speakers_dict[speaker_name].passive = self.speakers_dict[speaker_name].passive + sentiment_score.passive
+    #     self.northern_speakers_dict[speaker_name].famine_terms = self.speakers_dict[speaker_name].famine_terms + sentiment_score.famine_terms
+    #     self.northern_speakers_dict[speaker_name].grains_terms = self.speakers_dict[speaker_name].grains_terms + sentiment_score.grains_terms
+    #     self.northern_speakers_dict[speaker_name].processed_grains_terms = self.speakers_dict[speaker_name].processed_grains_terms + sentiment_score.processed_grains_terms
+    #     self.northern_speakers_dict[speaker_name].livestock_terms = self.speakers_dict[speaker_name].livestock_terms + sentiment_score.livestock_terms
+    #     self.northern_speakers_dict[speaker_name].potatoes_terms = self.speakers_dict[speaker_name].potatoes_terms + sentiment_score.potatoes_terms
+    #     self.northern_speakers_dict[speaker_name].hay_terms = self.speakers_dict[speaker_name].hay_terms + sentiment_score.hay_terms
+    # def update_southern_speakers_dict(self, speaker_name, sentiment_score):
+    #     self.southern_speakers_dict[speaker_name].total = self.speakers_dict[speaker_name].total + sentiment_score.total
+    #     self.southern_speakers_dict[speaker_name].positive = self.speakers_dict[speaker_name].positive + sentiment_score.positive
+    #     self.southern_speakers_dict[speaker_name].negative = self.speakers_dict[speaker_name].negative + sentiment_score.negative
+    #     self.southern_speakers_dict[speaker_name].strong = self.speakers_dict[speaker_name].strong + sentiment_score.strong
+    #     self.southern_speakers_dict[speaker_name].weak = self.speakers_dict[speaker_name].weak + sentiment_score.weak
+    #     self.southern_speakers_dict[speaker_name].active = self.speakers_dict[speaker_name].active + sentiment_score.active
+    #     self.southern_speakers_dict[speaker_name].passive = self.speakers_dict[speaker_name].passive + sentiment_score.passive
+    #     self.southern_speakers_dict[speaker_name].famine_terms = self.speakers_dict[speaker_name].famine_terms + sentiment_score.famine_terms
+    #     self.southern_speakers_dict[speaker_name].grains_terms = self.speakers_dict[speaker_name].grains_terms + sentiment_score.grains_terms
+    #     self.southern_speakers_dict[speaker_name].processed_grains_terms = self.speakers_dict[speaker_name].processed_grains_terms + sentiment_score.processed_grains_terms
+    #     self.southern_speakers_dict[speaker_name].livestock_terms = self.speakers_dict[speaker_name].livestock_terms + sentiment_score.livestock_terms
+    #     self.southern_speakers_dict[speaker_name].potatoes_terms = self.speakers_dict[speaker_name].potatoes_terms + sentiment_score.potatoes_terms
+    #     self.southern_speakers_dict[speaker_name].hay_terms = self.speakers_dict[speaker_name].hay_terms + sentiment_score.hay_terms
+    
+    def check_northern_speaker(self, speaker_name):
+        if speaker_name.upper() in self.northern_speakers:
+            return True
+        return False
+    
+    def check_southern_speaker(self, speaker_name):
+        if speaker_name.upper() in self.southern_speakers:
+            return True
+        return False
+    

@@ -34,19 +34,16 @@ class ISentimentAnalyser(ABC):
                 sentiment_score.weak = sentiment_score.weak + 1 if sentiment.weak == "Weak" else sentiment_score.weak
                 sentiment_score.active = sentiment_score.active + 1 if sentiment.active == "Active" else sentiment_score.active
                 sentiment_score.passive = sentiment_score.passive + 1 if sentiment.passive == "Passive" else sentiment_score.passive
-                
-                
-        
             index = index + 1
             if word_upper_case in self.famine_dict:
+                sentiment_score.famine_terms = sentiment_score.famine_terms + 1
+            # check for phrases in famine dictionary
+            elif index < len(words) - 1: 
+                next_word = words[index + 1]
+                phrase = word_upper_case + " " + next_word.upper()
+                if phrase in self.famine_dict:
                     sentiment_score.famine_terms = sentiment_score.famine_terms + 1
-            # check for phrases in famine_dict
-            elif word_upper_case == "FOOD":
-                if index < len(words) - 1:
-                    next_word = words[index + 1]
-                    phrase = word_upper_case + " " + next_word.upper()
-                    if phrase in self.famine_dict:
-                        sentiment_score.famine_terms = sentiment_score.famine_terms + 1
+
             # check all the agricultural dictionaries
             if word_upper_case in self.grains_dict:
                     sentiment_score.grains_terms = sentiment_score.grains_terms + 1

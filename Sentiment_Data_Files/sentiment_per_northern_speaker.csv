@@ -1,0 +1,23 @@
+member_name,total_words,positive,negative,strong,weak,active,passive,negative sentiment,famine_terms,grain_terms,processed_grain_terms,livestock_terms,potato_terms,hay_terms
+Mr William Verner,102726,3798,2231,6180,1026,4481,2495,2.17%,38,22,18,0,14,0
+Mr Leonard Dobbin,1010,10,6,47,2,48,7,0.59%,0,0,0,0,0,0
+Mr William Thompson,45532,1838,806,3089,448,1658,1127,1.77%,8,36,6,0,10,0
+Mr Edward Litton,49105,1931,1153,2889,589,1949,1263,2.35%,14,6,6,0,0,0
+Mr William Curry,362,19,6,36,7,17,9,1.66%,0,0,0,0,0,0
+Mr John Irving,3760,173,66,218,58,137,117,1.76%,4,0,0,0,0,0
+Mr Charles Brownlow,11649,583,260,713,145,366,350,2.23%,6,0,0,0,2,0
+Lord Claud Hamilton,138206,5771,3109,8872,1599,5344,3249,2.25%,31,1,0,0,2,0
+Mr William Stuart,6427,186,137,418,71,235,163,2.13%,2,0,0,0,0,0
+Mr John Rawdon,46562,1897,924,3109,576,1883,1200,1.98%,22,16,0,0,10,0
+Sir Arthur Brooke,15836,658,372,954,271,579,448,2.35%,26,10,4,6,8,0
+Mr George Beresford,73,3,1,4,1,2,0,1.37%,0,0,0,0,0,0
+Mr Mervyn Archdall,10948,412,277,749,138,444,260,2.53%,2,0,0,0,0,0
+Mr Richard Ker,2353,85,43,159,24,109,51,1.83%,0,0,0,0,0,0
+Sir Edmund Macnaghten,423,19,13,26,7,21,12,3.07%,1,1,0,0,2,0
+Mr James Caulfeild,69,4,1,5,0,6,2,1.45%,0,0,0,0,0,0
+Mr George Macartney,27361,862,510,1618,302,1058,604,1.86%,6,12,0,0,0,0
+Mr Ross Moore,10778,415,176,479,98,321,212,1.63%,0,0,0,0,0,0
+Lord Arthur Hill,734,29,7,24,6,12,8,0.95%,0,0,0,0,0,0
+Mr David Ker,108,2,1,6,1,6,2,0.93%,0,0,0,0,0,0
+Mr Stearne Miller,3100,154,37,209,26,129,65,1.19%,0,0,0,0,0,0
+Mr William Forde,131,3,4,7,3,9,2,3.05%,0,0,0,0,0,0
