@@ -22,7 +22,7 @@ period_speeches_file_path = "C:\\Python Projects\\final_year_project_data\\Irish
 hansard_1835_1840_file_path = "C:\\hansard_data\\1835-1840.csv"
 dictionary_file_path = "C:\\Python Projects\\final_year_project_data\\inquirerbasic.csv"
 
-speakers_info_file_path = "C:\\Speakers_data\\speakers_names.csv"
+speakers_info_file_path = "C:\\Speakers_data\\speakers_data.csv"
 
 
 
