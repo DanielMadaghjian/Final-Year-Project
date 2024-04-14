@@ -24,9 +24,6 @@ dictionary_file_path = "C:\\Python Projects\\final_year_project_data\\inquirerba
 
 speakers_info_file_path = "C:\\Speakers_data\\speakers_data.csv"
 
-
-
-
 famine_dict = [
     'FAMINE',
     'HUNGER',
@@ -88,18 +85,17 @@ hay_dict = [
 
 
 if __name__ == '__main__':
-    # STEP 1: Create Sentiment Dictionary
+    # STEP 1: create a python dictionary using the General Inquirer Dictionary with each term and their relevant sentiment polarities.
     sentiment_builder = SentimentDictBuilder()
     sentiment_builder.createDictionary(dictionary_file_path)
     
-    # STEP: Create lists of northern and southern speakers
+    # STEP 2: Create lists of northern and southern Irish speakers, which allows more comprehensive analysis of speakers by region
     speaker_builder = northAndSouthDictBuilder()
     speaker_builder.createDictionary(speakers_info_file_path)
     
-    # STEP 2: Analyse sentiment by year and by speaker
+    # STEP 3: Analyse sentiment by date and by speaker
     date_analyser = ByDateSentimentAnalyser(sentiment_builder.sentiment_dict, famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict)
     speaker_analyser = BySpeakerSentimentAnalyser(sentiment_builder.sentiment_dict, speaker_builder.northern_speakers, speaker_builder.southern_speakers,famine_dict, grains_dict, processed_grains_dict, livestock_dict, potatoes_dict, hay_dict)
-    
     print("analysing files....")
     for file in hansard_file_list:
         path = "C:\\hansard_data"+"\\"+file
@@ -107,14 +103,15 @@ if __name__ == '__main__':
         speaker_analyser.analyse_speeches(path)
         print(file + " is done analysis")
     
-    # STEP 3: Write results to file
+    # STEP 4: Write results to file
     print("writing results to file....")
+    # (1) by year
     yearlyDateFileWriter = ByYearlyDateFileWriter(date_analyser.yearly_date_dict)
-    bimonthlyDateFileWriter = ByBimonthlyDateFileWriter(date_analyser.bimonthly_date_dict)
     yearlyDateFileWriter.WriteToFile()
+    # (2) by bimonthly
+    bimonthlyDateFileWriter = ByBimonthlyDateFileWriter(date_analyser.bimonthly_date_dict)
     bimonthlyDateFileWriter.WriteToFile()
-
-    
+    # (3) by speaker
     speakerFileWriter = BySpeakerFileWriter()
     speakerFileWriter.WriteToFile('sentiment_per_speaker.csv', speaker_analyser.speakers_dict)
     speakerFileWriter.WriteToFile('sentiment_per_northern_speaker.csv', speaker_analyser.northern_speakers_dict)
